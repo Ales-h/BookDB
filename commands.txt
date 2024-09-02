@@ -1,0 +1,7 @@
+TAILWIND
+
+Start a watcher
+./tailwindcss -i public/css/styles.css -o public/css/output.css --watch
+
+# Compile and minify your CSS for production
+./tailwindcss -i input.css -o output.css --minify
