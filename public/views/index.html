@@ -13,15 +13,22 @@
 <body class="bg-bgcolor text-lighttext font-sans">
     <span class="htmx-indicator text-center">
         Searching... </span>
-    <div class="flex mx-auto justify-center">
-        <input class="form-control text-black" type="search" name="search" placeholder="search books" hx-post="/search"
-            hx-trigger="input changed delay:500ms, search" hx-target="#results" hx-indicator=".htmx-indicator"
-            hx-swap="innerHTML">
+    <div class="mx-auto flex justify-center w-96 h-16">
+        <input class="form-control text-black text-xl" type="search" name="search" placeholder="search books"
+            hx-post="/search" hx-trigger="input changed delay:500ms, search" hx-target="#results"
+            hx-indicator=".htmx-indicator" hx-swap="innerHTML">
     </div>
 
     <div id="results">
         {{ template "results" . }}
     </div>
+
+    <div id="modal"
+        class="hidden fixed bg-boxcolor my-auto p-6 rounded-lg shadow-lg max-w-3xl max-h-[500px] mx-auto inset-0 flex items-center justify-center">
+        {{ template "form" . }}
+    </div>
+
+
 </body>
 
 </html>
@@ -45,12 +52,17 @@
                 <p class="">Pages: {{.PageCount}} </p> <br>
             </div>
         </div>
-        <div class="m-2 flex flex-col items-center justify-center">
-            <button type="button" class="addbutton bg-green-800 w-20 h-20 text-4xl rounded-md ">
+        <div class="openFormButton m-2 flex flex-col items-center justify-center">
+            <button type="button"
+                class="text-center align-middle p-0 m-auto bg-green-800 w-20 h-20 text-4xl rounded-md "
+                hx-post="/prefill-form"
+                hx-vals='{"title": "{{ .Title }}", "authors": "{{ .Authors }}", "pages": "{{ .PageCount }}"}'
+                hx-target="#modal" hx-swap="innerHTML">
                 +
             </button>
         </div>
     </div>
     {{end}}
 </div>
+<script src="/public/js/script.js"></script>
 {{ end }}

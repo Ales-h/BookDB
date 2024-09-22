@@ -1,0 +1,45 @@
+{{ define "form" }}
+<div class="p-8 rounded-lg w-full max-w-md">
+    <h2 class="text-2xl text-white font-sans font-bold mb-4">Save Book</h2>
+    <form id="addBook" autocomplete="off">
+
+        <div class="mb-4 border-b border-teal-500">
+            <label for="input1" class="block font-medium text-gray-700">name</label>
+            <input type="text" id="input1" name="input1"
+                class="mt-1 p-2 block w-full text-sm focus:ring-0 appearance-none bg-transparent border-none"
+                value={{.Title }}>
+        </div>
+
+        <div class="mb-4 border-b border-teal-500">
+            <label for="input1" class="block font-medium text-gray-700">date of release</label>
+            <input type="text" id="input1" name="input1"
+                class="mt-1 p-2 block w-full text-sm focus:ring-0 appearance-none bg-transparent border-none">
+        </div>
+
+        <div class="mb-4 border-b border-teal-500">
+            <label for="input1" class="block font-medium text-gray-700">authors</label>
+            <input type="text" id="input1" name="input1"
+                class="mt-1 p-2 block w-full focus:ring-0 rounded-md text-sm appearance-none bg-transparent border-none"
+                value={{.Authors}}>
+        </div>
+
+        <div class="mb-4 ">
+            <label for="input1" class="block font-medium text-gray-700">pages</label>
+            <input type="number" id="input1" name="input1"
+                class="mt-1 border-b border-teal-500  p-2 block focus:ring-0 rounded-md text-sm appearance-none bg-transparent"
+                value={{.Pages}}>
+        </div>
+
+        <div class="flex justify-end">
+            <button type="button" id="closeFormButton"
+                class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Submit</button>
+        </div>
+    </form>
+</div>
+<script>
+            document.getElementById('closeFormButton').addEventListener('click', function() {
+                document.getElementById('modal').classList.add('hidden');
+            });
+</script>
+{{ end }}

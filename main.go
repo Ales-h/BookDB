@@ -6,9 +6,9 @@ import (
 	"html/template"
 	"io"
 	"net/http"
-    "os"
-    "regexp"
-	//"strconv"
+	"os"
+	"regexp"
+	"strconv"
 	//"time"
 	"github.com/labstack/echo/v4"
 	//"github.com/labstack/echo/v4/middleware"
@@ -87,7 +87,6 @@ func BooksSearch(query string) ([]Volume, error) {
 
 	err = decoder.Decode(&result)
 	if err != nil {
-		fmt.Println("error1")
 		return []Volume{}, err
 	}
 
@@ -102,39 +101,57 @@ func BooksSearch(query string) ([]Volume, error) {
 }
 
 func main() {
-    API_KEY = os.Getenv(API_KEY)
+	API_KEY = os.Getenv(API_KEY)
 
 	e := echo.New()
 	logger = e.Logger
 	e.Renderer = NewTemplate()
 	e.Static("/public", "public")
 	e.Debug = true
-    re, err := regexp.Compile("\\s+")
+	re, err := regexp.Compile("\\s+")
 
-    if err != nil {
-        panic(fmt.Sprintf("Failed to compile Regex: %v", err))
-    }
+	if err != nil {
+		panic(fmt.Sprintf("Failed to compile Regex: %v", err))
+	}
 	e.GET("/", func(c echo.Context) error {
-		fmt.Printf("HELLO")
 		return c.Render(http.StatusOK, "index", nil)
 	})
 
 	e.POST("/search", func(c echo.Context) error {
 		query := c.FormValue("search")
-        if query == "" { // if search bar is empty clear the Volumes
-            return c.Render(200, "results", []Volume{})
-        }
-        q := re.ReplaceAllString(query, "+")
+		if query == "" { // if search bar is empty clear the Volumes
+			return c.Render(200, "results", []Volume{})
+		}
+		q := re.ReplaceAllString(query, "+")
 		volumes, err := BooksSearch(q)
 		if err != nil {
-			fmt.Printf(err.Error())
 			return c.String(http.StatusInternalServerError, "Error fetching books")
 		}
-		fmt.Printf("%v", volumes)
+        //fmt.Printf("%v", volumes)
 
 		return c.Render(200, "results", volumes)
 
 	})
+
+	e.POST("/prefill-form", func(c echo.Context) error {
+
+		title := c.FormValue("title")
+		authors := c.FormValue("authors")
+		pages, err := strconv.Atoi(c.FormValue("pages"))
+        if err != nil {
+            return err
+        }
+		data := struct {
+			Title   string
+			Authors string
+			Pages   int
+        }{Title: title, Authors: authors, Pages: pages}
+
+		fmt.Printf("%+v\n", data)
+
+        return c.Render(200, "form", data)
+	})
+
 
 	e.Logger.Fatal(e.Start(":8080"))
 
