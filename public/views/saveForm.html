@@ -1,7 +1,7 @@
 {{ define "form" }}
-<div class="p-8 rounded-lg w-full max-w-md">
+<div class="p-8 rounded-lg w-full max-h-[450px] flex flex-col">
     <h2 class="text-2xl text-white font-sans font-bold mb-4">Save Book</h2>
-    <form id="addBook" autocomplete="off">
+    <form id="addBook" autocomplete="off" class="flex-grow overflow-y-auto pr-4">
 
         <div class="mb-4 border-b border-teal-500">
             <label for="input1" class="block font-medium text-gray-700">name</label>
@@ -12,7 +12,7 @@
 
         <div class="mb-4 border-b border-teal-500">
             <label for="input1" class="block font-medium text-gray-700">date of release</label>
-            <input type="text" id="input1" name="input1"
+            <input type="text" id="input1" name="input1" value={{ .DateOfRelease }}
                 class="mt-1 p-2 block w-full text-sm focus:ring-0 appearance-none bg-transparent border-none">
         </div>
 
@@ -30,16 +30,38 @@
                 value={{.Pages}}>
         </div>
 
+        <div class="mb-4">
+            <label for="input1" class="block font-medium text-gray-700">Status</label>
+            <select id="status" name="status"
+                class="mt-1 block w-full pl-3 pr-10 py-2 text-black border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                <option value="not_started" class="text-black">Not Started</option>
+                <option value="in_progress" class="text-black">In Progress</option>
+                <option value="done" class="text-black">Done</option>
+            </select>
+        </div>
+
+        <div class="mb-4 ">
+            <label for="dateOfFinish" class="block font-medium text-gray-700">Date of Finish</label>
+            <input type="text" id="dateOfFinish" name="input1" placeholder="MM-YYYY"
+                class="mt-1 border-b border-teal-500  p-2 block focus:ring-0 rounded-md text-sm appearance-none bg-transparent">
+        </div>
+
+        <div class="mb-4 ">
+            <label for="rating" class="block font-medium text-gray-700">Rating</label>
+            <input type="number" id="rating" name="input1"
+                class="mt-1 border-b border-teal-500  p-2 block focus:ring-0 rounded-md text-sm appearance-none bg-transparent">
+        </div>
+
+    </form>
         <div class="flex justify-end">
             <button type="button" id="closeFormButton"
                 class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
             <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Submit</button>
         </div>
-    </form>
 </div>
 <script>
-            document.getElementById('closeFormButton').addEventListener('click', function() {
-                document.getElementById('modal').classList.add('hidden');
-            });
+    document.getElementById('closeFormButton').addEventListener('click', function () {
+        document.getElementById('modal').classList.add('hidden');
+    });
 </script>
 {{ end }}

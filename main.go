@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"io"
 	"net/http"
+    "net/url"
 	"os"
 	"regexp"
 	"strconv"
@@ -69,7 +70,12 @@ func GetVolumeData(url string) (Volume, error) {
 func BooksSearch(query string) ([]Volume, error) {
 	const baseURL = "https://www.googleapis.com/books/v1/volumes"
 
-	url := fmt.Sprintf("%s?q=%s&printType=books&key=%s", baseURL, query, API_KEY)
+    q := url.Values{}
+    q.Add("q", query)
+    q.Add("printType", "books")
+    q.Add("key", API_KEY);
+	//url := fmt.Sprintf("%s?q=%s&printType=books&key=%s", baseURL, query.Encode(), API_KEY)
+    url := baseURL + "?" + q.Encode()
 	fmt.Print(url)
 	res, err := http.Get(url)
 	if err != nil {
@@ -127,7 +133,7 @@ func main() {
 		if err != nil {
 			return c.String(http.StatusInternalServerError, "Error fetching books")
 		}
-        //fmt.Printf("%v", volumes)
+		//fmt.Printf("%v", volumes)
 
 		return c.Render(200, "results", volumes)
 
@@ -137,21 +143,22 @@ func main() {
 
 		title := c.FormValue("title")
 		authors := c.FormValue("authors")
+        dateOfRelease := c.FormValue("dateOfRelease")
 		pages, err := strconv.Atoi(c.FormValue("pages"))
-        if err != nil {
-            return err
-        }
+		if err != nil {
+			return err
+		}
 		data := struct {
 			Title   string
 			Authors string
 			Pages   int
-        }{Title: title, Authors: authors, Pages: pages}
+            DateOfRelease string
+		}{Title: title, Authors: authors, Pages: pages, DateOfRelease: dateOfRelease}
 
 		fmt.Printf("%+v\n", data)
 
-        return c.Render(200, "form", data)
+		return c.Render(200, "form", data)
 	})
-
 
 	e.Logger.Fatal(e.Start(":8080"))
 

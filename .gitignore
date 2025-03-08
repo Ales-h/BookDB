@@ -2,4 +2,6 @@
 /public/css/output.css
 *.log
 .env
+.air.toml
+air.toml
 .DS_Store
